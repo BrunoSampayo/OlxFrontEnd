@@ -3,7 +3,7 @@ import * as C from './Footer.Styled'
 const Footer = ()=>{
     return(
         <C.FooterArea>
-            ....f
+            Footer
         </C.FooterArea>
     );
 }
