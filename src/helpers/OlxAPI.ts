@@ -51,7 +51,10 @@ type adOther={
 
 import Cookies from 'js-cookie'
 import qs from 'qs'
+import axios from 'axios'
+
 const BaseAPI ='http://alunos.b7web.com.br:501'
+
 const apiFetchPost = async (endPoint:string,body:Record<string,unknown>)=>{
     if(!body.token){
         let token = Cookies.get('token')
@@ -59,6 +62,27 @@ const apiFetchPost = async (endPoint:string,body:Record<string,unknown>)=>{
             body.token = token
         }
     }
+    try{
+        const res= await axios.post(`${BaseAPI}${endPoint}`,body,{
+            headers:{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+        const json = res.data
+
+        if(json.notallowed){
+            window.location.href="/signin"
+            return;
+        }
+        return json;
+    } catch(error){
+        console.log('Erro de Conexão POST: ', error)
+        
+        
+    }
+
+    /*
     const res = await fetch(BaseAPI+endPoint,{
         method:'POST',  
         headers:{
@@ -68,27 +92,43 @@ const apiFetchPost = async (endPoint:string,body:Record<string,unknown>)=>{
         body:JSON.stringify(body)
     
     });
-    console.log("teste")
-    if(!res.ok){
-        console.log('Erro conecção à API', res.status, res.statusText)
-    }
+   
     const json = await res.json()
     if(json.notallowed){
         window.location.href='/signin'
         return
     }
     return json
+    */
+    
 }
 const apiFetchGet = async (endPoint:string,body?:Record<string,unknown>)=>{
     
-    const res = await fetch(`${BaseAPI +endPoint}?${qs.stringify(body)}`);
-    
+    /*const res = await fetch(`${BaseAPI +endPoint}?${qs.stringify(body)}`);
     const json = await res.json()
     if(json.notallowed){
         window.location.href='/signin'
         return
     }
-    return json
+    return json*/
+
+    try{
+        const res = await axios.get(`${BaseAPI}${endPoint}`,{
+            params:body,
+            paramsSerializer: params => qs.stringify(params)
+        });
+
+        const json = res.data;
+
+        if(json.notallowed){
+            window.location.href='/signin';
+            return;
+        }
+        return json;
+
+    }catch(error){
+        console.log('Erro de conecção GET: ', error)
+    }
 }
 
 
@@ -98,6 +138,7 @@ const OlxAPI = {
             '/user/signin',
             {email,password}
         );
+        
         return json
     },
     register:async(name:string,email:string,password:string,stateLoc:string)=>{

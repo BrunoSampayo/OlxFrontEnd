@@ -20,9 +20,11 @@ export const SignIn = ()=>{
         setDisabled(true)
 
         const json = await api.login(email,password)
-
+        
         if(json.error){
             setError(json.error)
+            
+            
         }else{
             doLogin(json.token, rememberPassword)
             window.location.href='/'
