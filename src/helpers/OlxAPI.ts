@@ -16,6 +16,38 @@ export type AdsType ={
     image: string
 }
 
+export type AdType={
+    id: string
+    title: string
+    price: number
+    priceNegotiable: boolean
+    description: string
+    dateCreated: string
+    views: number
+    category: adCategory
+    userInfo: adUserInfo
+    stateName: string
+    images: string[]
+    others: adOther[]   
+}
+type adCategory={
+    _id: string
+    name: string
+    slug: string
+}
+type adUserInfo={
+    name: string
+    email: string
+}
+type adOther={
+    id: string
+    title: string
+    price: number
+    priceNegotiable: boolean
+    image: string
+}
+
+
 
 import Cookies from 'js-cookie'
 import qs from 'qs'
@@ -36,6 +68,10 @@ const apiFetchPost = async (endPoint:string,body:Record<string,unknown>)=>{
         body:JSON.stringify(body)
     
     });
+    console.log("teste")
+    if(!res.ok){
+        console.log('Erro conecção à API', res.status, res.statusText)
+    }
     const json = await res.json()
     if(json.notallowed){
         window.location.href='/signin'
@@ -46,6 +82,7 @@ const apiFetchPost = async (endPoint:string,body:Record<string,unknown>)=>{
 const apiFetchGet = async (endPoint:string,body?:Record<string,unknown>)=>{
     
     const res = await fetch(`${BaseAPI +endPoint}?${qs.stringify(body)}`);
+    
     const json = await res.json()
     if(json.notallowed){
         window.location.href='/signin'
@@ -89,7 +126,15 @@ const OlxAPI = {
             options
         )
         return json
+    },
+    getAd:async (id:string|undefined,other=false)=>{
+        const json = await apiFetchGet(
+            '/ad/item',
+            {id, other}
+        );
+        return json
     }
+
 }
 
 export default ()=> OlxAPI
