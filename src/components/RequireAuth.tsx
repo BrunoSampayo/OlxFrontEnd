@@ -1,17 +1,16 @@
 type Props ={
     children: JSX.Element
+    privato?:any
 }
 import { Navigate } from "react-router-dom"
 import { isLogged } from "../helpers/AuthHandler"
 
-export const RequireAuth = ({children} :Props)=>{
+export const RequireAuth = ({children ,privato} :Props)=>{
     
-    let logged = isLogged()
+    let logged = isLogged();
+    let authorized = (privato && !logged) ? false : true
 
-    if(!logged){
-      return  <Navigate to='/signin'/>
-    }
-    return children
+    return authorized ? children : <Navigate to='/signin'/>
     
 
 }

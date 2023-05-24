@@ -18,7 +18,9 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.11.1",
     "react-slideshow-image": "^4.2.1",
+    "react-text-mask": "^5.5.0",
     "styled-components": "^6.0.0-rc.1",
+    "text-mask-addons": "^3.8.0",
     "update": "^0.7.4"
   },
   "devDependencies": {
@@ -27,7 +29,9 @@
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "@types/react-router-dom": "^5.3.3",
+    "@types/react-text-mask": "^5.4.11",
     "@types/styled-components": "^5.1.26",
+    "@types/text-mask-addons": "^3.8.1",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
     "@vitejs/plugin-react": "^4.0.0-beta.0",

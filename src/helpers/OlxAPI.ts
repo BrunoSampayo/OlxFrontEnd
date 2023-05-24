@@ -53,7 +53,32 @@ import Cookies from 'js-cookie'
 import qs from 'qs'
 import axios from 'axios'
 
-const BaseAPI ='http://alunos.b7web.com.br:501'
+const BaseAPI ='http://alunos.b7web.com.br:501';
+
+const apiFetchFile= async(endPoint:string,body:any)=>{
+    if(!body.token){
+        let token = Cookies.get('token')
+        if(token){
+            body.append("token",token)
+        }
+    }
+    try{
+        console.log(body)
+        const res= await axios.post(`${BaseAPI}${endPoint}`,body)
+
+        const json = res.data
+
+        if(json.notallowed){
+            window.location.href="/signin"
+            return;
+        }
+        return json;
+    } catch(error){
+        console.log('Erro de Conexão POST: ', error)
+        
+        
+    }
+}
 
 const apiFetchPost = async (endPoint:string,body:Record<string,unknown>)=>{
     if(!body.token){
@@ -173,6 +198,13 @@ const OlxAPI = {
             '/ad/item',
             {id, other}
         );
+        return json
+    },
+    addAd:async (fData:FormData)=>{
+        const json  = await apiFetchFile(
+            'ad/add',
+            fData
+        )
         return json
     }
 

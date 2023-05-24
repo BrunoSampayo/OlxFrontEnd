@@ -6,6 +6,7 @@ import { SignIn } from "./pages/SignIn";
 import { SignUp } from "./pages/SignUp";
 import { AdPage } from "./pages/AdPage";
 import { RequireAuth } from "./components/RequireAuth";
+import { AddAd } from "./pages/AddAd";
 export default () =>{
     return useRoutes([
         {path:'/', element:<Home/>},
@@ -13,7 +14,8 @@ export default () =>{
         {path:'/signin', element:<SignIn/>},
         {path:'/signup', element:<SignUp/>},
         {path:'/ad/:id', element:<AdPage/>},
-        {path:'/my-account', element:<RequireAuth><About/></RequireAuth>},
+        {path:'/my-account', element:<RequireAuth privato><About/></RequireAuth>},
+        {path:'/post-an-add', element:<RequireAuth privato><AddAd/></RequireAuth>},
         {path:'*', element:<NotFound/>}
 
     ])
