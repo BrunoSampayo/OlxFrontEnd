@@ -3,7 +3,8 @@ import * as C from './Footer.Styled'
 const Footer = ()=>{
     return(
         <C.FooterArea>
-            Footer
+           Todos os direito reservados <br />
+           OLX Clone B7Web
         </C.FooterArea>
     );
 }

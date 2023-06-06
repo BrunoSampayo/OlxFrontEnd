@@ -73,7 +73,7 @@ export const Home = ()=>{
                     </div>
                     <div className="categoryList">
                         {categories.map((item,index)=>(
-                            <Link key={index} to={`/ads/cat=${item.slug}`} className='categoryItem'>
+                            <Link key={index} to={`/ads?cat=${item.slug}`} className='categoryItem'>
                                 <img src={item.img} alt=''/>
                                 <span>{item.name}</span>
                             </Link>

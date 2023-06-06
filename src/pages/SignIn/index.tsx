@@ -23,6 +23,7 @@ export const SignIn = ()=>{
         
         if(json.error){
             setError(json.error)
+            setDisabled(false)
             
             
         }else{
