@@ -46,6 +46,28 @@ type adOther={
     priceNegotiable: boolean
     image: string
 }
+export type userDataType={
+    name:string;
+    email:string;
+    state:string;
+    ads:userAds[]
+}
+type userAds ={
+    status: boolean
+    id: string
+    images: userImages[]
+    dateCreated: string
+    title: string
+    category: string
+    price: number
+    priceNegotiable: boolean
+    description: string
+    views: number
+}
+type userImages = {
+ url:string;
+ default:boolean
+}
 
 
 
@@ -177,6 +199,27 @@ const apiFetchGet = async (endPoint:string,body?:Record<string,unknown>)=>{
     }
 }
 
+const apiFetchPut = async (endPoint:string, body:Record<string,unknown>)=>{
+    if(!body.token){
+        let token = Cookies.get('token')
+        if(token){
+            body.token = token
+        }
+    }
+        try{
+            const res = await axios.put(`${BaseAPI}${endPoint}`,body)
+            const json = res.data
+            if(json.notallowed){
+                window.location.href="/signin"
+                return;
+            }
+            return json;
+        }
+        catch(error){
+            console.log('Erro de Conexão put: ', error)
+        }
+}
+
 
 const OlxAPI = {
     login:async (email:string,password:string) =>{
@@ -225,6 +268,13 @@ const OlxAPI = {
         const json  = await apiFetchFile(
             '/ad/add',
             fData
+        )
+        return json
+    },
+    getUserData:async(token:string| undefined)=>{
+        const json: userDataType = await apiFetchGet(
+            '/user/me',
+            {token}
         )
         return json
     }

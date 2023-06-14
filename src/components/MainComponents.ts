@@ -11,6 +11,7 @@ margin: auto;
 
 export const PageTitle = styled.h1`
     font-size: 27px;
+    text-align: center;
 
 `;
 
