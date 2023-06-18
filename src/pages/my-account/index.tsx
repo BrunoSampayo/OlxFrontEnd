@@ -1,8 +1,11 @@
 import {useEffect, useState} from 'react';
 import useApi, { stateListType, userDataType } from '../../helpers/OlxAPI';
 import { PageArea, UserAds, UserData } from "./myAccount.Styled";
-import { ErrorMessage, PageContainer, PageTitle } from "../../components/MainComponents";
+import { ErrorMessage, Modal, PageContainer, PageTitle } from "../../components/MainComponents";
 import Cookies from "js-cookie";
+import  createNumberMask  from 'text-mask-addons/dist/createNumberMask';
+import { Link } from 'react-router-dom';
+
 
 
 export const MyAccount = ()=>{
@@ -17,7 +20,7 @@ export const MyAccount = ()=>{
     const [rememberPassword, setRememberPassword] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const [error, setError] = useState('')
-
+    const [modalIsOpened, setIsopen] = useState(true)
 
     useEffect(()=>{
         const getuserData = async()=>{
@@ -52,14 +55,22 @@ export const MyAccount = ()=>{
         }
     }
 
+    const priceMask = createNumberMask({
+        prefix:"R$ ",
+        includeThousandsSeparator:true,
+        thousandsSeparatorSymbol:'.',
+        allowDecimal:true,
+        decimalSymbol:','
+    })
 
     return(
         <PageContainer>
             <PageTitle>Minha Conta</PageTitle>
             <PageArea>
                 <UserData>
-                <h3>Dados:</h3>
+                
                     <form action="">
+                    <h3>Dados:</h3>
                 
                         <label className="area">
                                 <div className="area--title">Email</div>
@@ -76,8 +87,8 @@ export const MyAccount = ()=>{
                         <label className="area">
                             <div className="area--title">Estado</div>
                             <div className="area--input">
-                            <select required value={userData?.state} onChange={e=>setStateLoc(e.target.value)}>
-                                <option  ></option>
+                            <select required  value={stateLoc} onChange={e=>setStateLoc(e.target.value)}>
+                                <option   ></option>
                             {stateList.map((item, index)=>(
                                         <option value={item._id} key={index}>{item.name}</option>
                                     ))
@@ -105,28 +116,36 @@ export const MyAccount = ()=>{
                         </label>
                     </form>
                 </UserData>
+
                 
                 <UserAds>
-                
-                    {userData?.ads.map((i,k)=>(
-                        <div className="ad" >
-                            <div className="adTitle">{i.title}</div>
-                            <div className="adImage">
-                                <img src={`http://alunos.b7web.com.br:501/media/${i.images[0].url}`} alt="" />
-                            </div>
-                            <div className="adFooter">
-                                <div className="adPrice">{i.price}</div>
-                                <button>Editar Anuncio</button>
+                <h3>Anuncios Usuario</h3>
+                    <div className="ads">
+                        {userData?.ads.map((i,k)=>(
+                            <div className="ad" >
+                                <div className="adTitle">{i.title}</div>
+                                
+                                    <Link to={`/ad/${i.id}`} className='adImage'>
+                                        <img src={`http://alunos.b7web.com.br:501/media/${i.images[0].url}`} alt="" />
+                                    </Link>
+                                
+                                <div className="adPrice">{`R$ ${i.price}`}</div>
+                                <button onClick={e=>setIsopen(!modalIsOpened)}>Editar Anuncio</button>
+                                
                             </div>
                             
+                        ))}
+                    </div>
 
-
-                        </div>
-                    ))}
                
                 </UserAds>
               
-               
+              <Modal modalIsOpened={modalIsOpened} onClick={e=>e.target==this?console.log('teste1'):console.log('teste2')}>
+                
+                <div className="modalContent" onClick={(e)=>e.preventDefault()}>
+                    ffj
+                </div>
+              </Modal>
             </PageArea>
         </PageContainer>
     )

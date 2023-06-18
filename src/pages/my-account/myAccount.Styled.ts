@@ -3,7 +3,13 @@ import styled from "styled-components";
 export const PageArea = styled.div`
    
 
-
+    .modalContent{
+        width: 40%;
+        height: 50%;
+        box-shadow: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+    }
 `;
 
 export const UserData = styled.div`
@@ -70,6 +76,70 @@ export const UserData = styled.div`
 
 export const UserAds = styled.div`
 
-margin-top: 50px;
+    margin-top: 50px;
+    background-color: #fff;
+    padding: 1px 10px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 3px #999;
+   
+        
+.ads{
+    display: flex;
+    gap: 10px;
+}
+.ad{
+    width: 25%;
+    
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #000;
+
+    .adTitle{
+        font-weight: bold;
+        text-align: center;
+        padding: 5px;
+
+    }
+
+    .adImage{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img{
+            width: 78%;
+        }
+    }
+    
+    .adPrice{
+        font-weight: bold;
+        margin: 5px 0;
+    }
+    button{
+        background-color: #00846f;
+        border: 0;
+        outline: 0;
+        padding: 8px 10px;
+        border-radius: 10px;
+        color: #fff;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all ease .4s;
+
+        &:hover{
+            background-color: #006471;
+        }
+            }
+}
+
 
 `;
