@@ -1,9 +1,10 @@
 import {useEffect, useState} from 'react';
-import useApi, { stateListType, userDataType } from '../../helpers/OlxAPI';
-import { PageArea, UserAds, UserData } from "./myAccount.Styled";
-import { ErrorMessage, Modal, PageContainer, PageTitle } from "../../components/MainComponents";
+import useApi, { CategoriesType, stateListType, userAds, userDataType } from '../../helpers/OlxAPI';
+import { Modal, PageArea, UserAds, UserData } from "./myAccount.Styled";
+import { ErrorMessage,  PageContainer, PageTitle } from "../../components/MainComponents";
 import Cookies from "js-cookie";
-import  createNumberMask  from 'text-mask-addons/dist/createNumberMask';
+import MaskedInput from 'react-text-mask';
+import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 import { Link } from 'react-router-dom';
 
 
@@ -11,6 +12,13 @@ import { Link } from 'react-router-dom';
 export const MyAccount = ()=>{
     const api = useApi()
 
+    const priceMask = createNumberMask({
+        prefix:"R$ ",
+        includeThousandsSeparator:true,
+        thousandsSeparatorSymbol:'.',
+        allowDecimal:true,
+        decimalSymbol:','
+    })
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -21,6 +29,8 @@ export const MyAccount = ()=>{
     const [disabled, setDisabled] = useState(false);
     const [error, setError] = useState('')
     const [modalIsOpened, setIsopen] = useState(true)
+    const [modalAdData, setModalAdData] = useState<userAds>()
+    const [categories,setCategories] = useState<CategoriesType[]>([])
 
     useEffect(()=>{
         const getuserData = async()=>{
@@ -40,6 +50,14 @@ export const MyAccount = ()=>{
         }
         getStates();
     },[])
+    useEffect(()=>{
+        const getCategories = async ()=>{
+            const cats = await api.getCategories();
+            setCategories(cats)
+        }
+        getCategories()
+
+    },[])
 
     const handleSubmit = async (e:React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault()
@@ -55,13 +73,17 @@ export const MyAccount = ()=>{
         }
     }
 
-    const priceMask = createNumberMask({
-        prefix:"R$ ",
-        includeThousandsSeparator:true,
-        thousandsSeparatorSymbol:'.',
-        allowDecimal:true,
-        decimalSymbol:','
-    })
+  
+    const handleModalClick = (e:React.MouseEvent<HTMLDivElement>)=>{
+        const target = e.target as HTMLDivElement
+        if(target.className.includes('modalContainer')){
+            console.log(target.className)
+            setIsopen(!modalIsOpened)
+        }else{
+            console.log(target.className)
+            return
+        }
+    }
 
     return(
         <PageContainer>
@@ -122,7 +144,7 @@ export const MyAccount = ()=>{
                 <h3>Anuncios Usuario</h3>
                     <div className="ads">
                         {userData?.ads.map((i,k)=>(
-                            <div className="ad" >
+                            <div key={k} className="ad" >
                                 <div className="adTitle">{i.title}</div>
                                 
                                     <Link to={`/ad/${i.id}`} className='adImage'>
@@ -130,7 +152,7 @@ export const MyAccount = ()=>{
                                     </Link>
                                 
                                 <div className="adPrice">{`R$ ${i.price}`}</div>
-                                <button onClick={e=>setIsopen(!modalIsOpened)}>Editar Anuncio</button>
+                                <button onClick={e=>{setIsopen(!modalIsOpened);setModalAdData(i)} }>Editar Anuncio</button>
                                 
                             </div>
                             
@@ -140,10 +162,112 @@ export const MyAccount = ()=>{
                
                 </UserAds>
               
-              <Modal modalIsOpened={modalIsOpened} onClick={e=>e.target==this?console.log('teste1'):console.log('teste2')}>
+              <Modal className='modalContainer' style={{display:`${modalIsOpened ? 'none' : 'flex'}`}} onClick={e=>handleModalClick(e)} >
                 
-                <div className="modalContent" onClick={(e)=>e.preventDefault()}>
-                    ffj
+                <div className="modalContent" >
+                    <div className="closeButton">
+                        <button onClick={e=>setIsopen(!modalIsOpened)}>X</button>
+                    </div>
+                    <h3>Editar Anuncio</h3>
+                    <form action="">
+                        <label className='area'>
+                            <div className="area--title">Imagens </div>
+                            <div className="currentModalAdImage">
+                                <img src={`http://alunos.b7web.com.br:501/media/${modalAdData?.images[0].url}`} alt="" />
+                            </div>
+                            <div className="area--input">
+                           <input 
+                            type="file" 
+                            disabled={disabled}
+                            
+                            multiple
+                           
+                           />
+                        </div>
+                        </label>
+                        <label className="area">
+                            <div className="area--title">status publicado</div>
+                            <div className="area--input">
+                                
+                                <input 
+                                checked={modalAdData?.status}
+                                type='checkbox'/>
+                           
+                            </div>
+                        </label>
+                        <label className="area">
+                            <div className="area--title">Titulo</div>
+                            <div className="area--input">
+                                <input 
+                                    type="text" 
+                                    disabled={disabled} 
+                                    value={modalAdData?.title}
+                                    //onChange={e=>setTitle(e.target.value)}
+                                    required
+                                />
+                            </div>
+                         </label>
+                        <label className="area">
+                            <div className="area--title">Categoria</div>
+                            <div className="area--input">
+                                <select
+                                disabled={disabled}
+                                //onChange={e=>setCategory(e.target.value)}
+                                required
+                                >
+                                    <option></option>
+                                    //{categories && 
+                                    categories.map((cat,k)=>(
+                                        <option key={k} value={cat._id}>{cat.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        </label>
+                        <label className="area">
+                            <div className="area--title">Preço</div>
+                            <div className="area--input">
+                            <MaskedInput
+                                mask={priceMask}
+                                placeholder="R$ "
+                                //disabled={disabled || priceNegociable}
+                                value={modalAdData?.price}
+                                //onChange={e=>setPrice(e.target.value)}
+                            />
+                            </div>
+                        </label>
+                    <label className="area">
+                        <div className="area--title">Preço Negociavel</div>
+                        <div className="area--input">
+                            <input 
+                                type="checkbox" 
+                                disabled={disabled}
+                                //checked={priceNegociable}
+                                //onChange={()=>setPriceNegociable(!priceNegociable)}
+                            />
+                        </div>
+                    </label>
+                    <label className="area">
+                        <div className="area--title">Descrição</div>
+                        <div className="area--input">
+                           <textarea
+                           disabled={disabled}
+                            value={modalAdData?.description}
+                            //onChange={e=>setDesc(e.target.value)}
+                           >
+                           </textarea>
+                        </div>
+                    </label>
+                    
+                
+                       
+                    
+                        <label className="area">
+                            <div className="area--title"></div>
+                            <div className="area--input">
+                                <button disabled={disabled}>Alterar Dados</button>
+                            </div>
+                        </label>
+                    </form>
                 </div>
               </Modal>
             </PageArea>

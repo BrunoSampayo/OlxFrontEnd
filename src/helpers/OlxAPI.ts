@@ -52,7 +52,7 @@ export type userDataType={
     state:string;
     ads:userAds[]
 }
-type userAds ={
+export type userAds ={
     status: boolean
     id: string
     images: userImages[]

@@ -23,7 +23,7 @@
     "react-text-mask": "^5.5.0",
     "styled-components": "^6.0.0-rc.1",
     "text-mask-addons": "^3.8.0",
-    "update": "^0.7.4"
+    "update": "^0.4.2"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.3",
