@@ -66,6 +66,28 @@ export const UserData = styled.div`
             }
         }
     }
+    @media (max-width: 600px){
+    form{
+        .area{
+            flex-direction: column;
+
+            .area--title{
+                width: 100%;
+                text-align: left;
+                margin-bottom: 10px;
+            }
+            .area--input{
+                width: 100%;
+                
+
+                button{
+                    width: 100%;
+                    padding: 10px;
+                }
+            }
+        }
+    }
+}
 
 
 `;
@@ -137,6 +159,12 @@ export const UserAds = styled.div`
             }
 }
 
+@media (max-width: 600px){
+    .ad{
+        width: 50%;
+        flex-wrap: wrap;
+    }
+}
 
 `;
 
@@ -158,7 +186,7 @@ export const Modal = styled.div`
 
     .modalContent{
         width: 40%;
-        height: 60%;
+        height: auto;
         box-shadow: 1px solid #ccc;
         border-radius: 5px;
         background-color: #fff;
@@ -273,4 +301,31 @@ export const Modal = styled.div`
         }
         
     }
+    @media (max-width: 600px){
+
+    .modalContent{
+            width: 90%;
+            
+    }
+    form{
+        .area{
+            flex-direction: column;
+
+            .area--title{
+                width: 100%;
+                text-align: left;
+                margin-bottom: 10px;
+            }
+            .area--input{
+                width: 100%;
+                
+
+                button{
+                    width: 100%;
+                    padding: 10px;
+                }
+            }
+        }
+    }
+}
 `;

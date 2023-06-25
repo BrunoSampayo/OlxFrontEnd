@@ -277,6 +277,18 @@ const OlxAPI = {
             {token}
         )
         return json
+    },
+    changeUserData:async(token:string|undefined,name:string,email:string,state:string,password:string)=>{
+        const json = await apiFetchPut(
+            `/user/me`,
+            {token,name,email,state,password}
+        )
+    },
+    changeAd:async(id:string,token:string|undefined,status:boolean,title:string,category:string,price:string,priceNegotiable:boolean|undefined,description:string,images:string,img: any[])=>{
+        const json = await apiFetchPost(
+            `/ad/${id}`,
+            {token,status,title,category,price,priceNegotiable,description,images,img}
+        )
     }
 
 }
